@@ -1,12 +1,14 @@
 class Activity {
     static all = []
   
-    constructor({id, title, name}) {
+    constructor({id, title, childenrolls}) {
+      
       this.id = id;
       this.title = title;
-      // Childenroll.name = name;
+      this.childenrolls = childenrolls;
+     
       Activity.all.push(this);
-      // Childenroll.all.push(this);
+      
     }
   
     render() {
@@ -19,11 +21,11 @@ class Activity {
       const form = document.createElement('form');
       const childInput = document.createElement('input');
       const addButton = document.createElement('input');
-  
+      
       h3.innerText = this.title;
       h3.style.color = 'blue';
 
-      p.innerText = Childenroll.name;
+      p.innerText = this.childenrolls;
       p.style.color = 'green';
   
       deleteButton.innerText = 'delete activity';
@@ -57,9 +59,9 @@ class Activity {
   
     static async loadAll() {
       const activities = await ActivityService.get('/activities');
-        
-      activities.forEach(activity => new Activity(activity))
-  
+      
+      activities.data.forEach(activity => new Activity(activity.attributes).json)
+      
       Activity.renderAll();
     }
   

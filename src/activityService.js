@@ -23,7 +23,7 @@ class ActivityService {
   }
 
   /** Event Handlers **/
-const addChild = async (activity, e) => {
+const addChild = async (e) => {
   e.preventDefault()
 
   const strongParams = {

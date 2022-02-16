@@ -1,11 +1,11 @@
 class Activity {
     static all = []
   
-    constructor({id, title, childenrolls}) {
+    constructor(data) {
       
-      this.id = id;
-      this.title = title;
-      this.childenrolls = childenrolls;
+      this.id = data.id;
+      this.title = data.title;
+      this.childenrolls = data.childenrolls;
      
       Activity.all.push(this);
       
@@ -15,10 +15,12 @@ class Activity {
       const div = document.createElement('div');
       const h3 = document.createElement('h3');
       const p = document.createElement('p');
+      const form = document.createElement('form');
+
       const deleteButton = document.createElement('button');
       const editButton = document.createElement('button');
 
-      const form = document.createElement('form');
+      
       const childInput = document.createElement('input');
       const addButton = document.createElement('input');
       
@@ -38,18 +40,19 @@ class Activity {
 
       addButton.type = 'submit';
       addButton.value = 'add child';
-      form.addEventListener('submit', e => addChild(this, e))
+      p.addEventListener('submit', e => addChild(this, e))
   
       div.appendChild(h3);
       div.appendChild(p);
       div.appendChild(deleteButton);
       div.appendChild(editButton);
   
-      form.appendChild(childInput);
-      form.appendChild(addButton);
+      p.appendChild(childInput);
+      p.appendChild(addButton);
 
+      
       activityList().appendChild(div);
-
+      activityList().appendChild(p);
     }
   
     static renderAll() {
@@ -59,8 +62,10 @@ class Activity {
   
     static async loadAll() {
       const activities = await ActivityService.get('/activities');
+     
+
+      activities.data.forEach(activity => new Activity(activity.attributes))
       
-      activities.data.forEach(activity => new Activity(activity.attributes).json)
       
       Activity.renderAll();
     }
@@ -81,60 +86,28 @@ class Activity {
       activityObj.render();
       document.getElementById('title').value = ""
     }
+
+
+    static addChild = async (e) => {
+      debugger
+      e.preventDefault()
+    
+      const strongParams = {
+        activity: {
+          activity: getActivity().value,
+        }
+    
+      }
+    
+      const kidsData = await ActivityService.post('/childenrolls', strongParams)
+
+      const childenrollObj = new Activity(kidsData)
+      childenrollObj.render()
+      // const newChildenroll = await childenrollObj.json();
+      document.getElementById('name').value = ""
+      // const index = Activity.all.indexOf(Childenroll)
+      // Activity.all[index] = new Activity(newChildenroll)
+    }
+
+
   }
-
-// class Activity{
-
-//   static all = []
-//     static activitiesContainer = document.getElementById("activities-container")
-//     static activityForm = document.getElementById('new-activity-form')
-
-//     constructor({id, title}){
-//         Activity.all.push(this)
-//         this.id = id
-//         this.title = title
-        
-
-//         this.element = document.createElement('li')
-//         this.element.dataset.id = this.id
-//         this.element.id = `activity-${this.id}`
-//         this.element.addEventListener('click', this.handleClick)
-
-//         Activity.all.push(this)
-//     }
-
-//     activityHTML(){
-//         this.element.innerHTML += `
-//             <div> 
-//             <h3> ${this.title}</h3>
-//             <p> ${Childenroll.id}</p>
-//             </div>
-//             <button id='delete-bttn'>Delete</button>
-//             <br>
-//             <br>
-
-//         `
-//         return this.element
-//     }
-
-
-//     Dom(){
-//         Activity.activitiesContainer.appendChild(this.activityHTML())
-        
-//     }
-
-//     static renderForm(){
-//         Activity.activityForm.innerHTML += `
-//         <form id="new-activity-form">
-//         <input type="text" id="title"> 
-//         <input type="submit" value= "Create Activity"id="create"> 
-//         <form>
-//         `
-//     }
-//     handleClick = () => {
-
-//         if (event.target.innerText === 'Delete'){
-//             activityService.deleteActivity(this.id)
-//         }
-//     }
-// }

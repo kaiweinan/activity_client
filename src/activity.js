@@ -27,7 +27,9 @@ class Activity {
       h3.innerText = this.title;
       h3.style.color = 'blue';
 
-      p.innerText = this.childenrolls;
+      this.childenrolls.forEach(child => {
+        p.innerText += `${child.name} `;
+      });
       p.style.color = 'green';
   
       deleteButton.innerText = 'delete activity';
@@ -40,15 +42,16 @@ class Activity {
 
       addButton.type = 'submit';
       addButton.value = 'add child';
-      p.addEventListener('submit', e => addChild(this, e))
+      p.addEventListener('submit', e => Activity.addChild(this, e))
   
       div.appendChild(h3);
       div.appendChild(p);
       div.appendChild(deleteButton);
       div.appendChild(editButton);
+      p.appendChild(form)
   
-      p.appendChild(childInput);
-      p.appendChild(addButton);
+      form.appendChild(childInput);
+      form.appendChild(addButton);
 
       
       activityList().appendChild(div);

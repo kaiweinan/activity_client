@@ -55,46 +55,47 @@ const deleteActivity = async activity => {
     Activity.renderAll();
   }
   
-  const editActivity = activity => {
-    activityForm().removeEventListener('submit', Activity.createActivity);
-    getTitle().value = activity.title;
+  // const editActivity = activity => {
+  //   activityForm().removeEventListener('submit', Activity.createActivity);
+  //   getTitle().value = activity.title;
     
-    activityFormSubmit().value = 'update activity';
-    formHeader().innerText = 'Edit Activity';
-    updateActivity = updateActivity.bind(activity);
-    activityForm().addEventListener('submit', updateActivity)
-  }
+  //   // activityFormSubmit().value = 'update activity';
+  //   // formHeader().innerText = 'Edit Activity';
+  //   updateActivity = updateActivity.bind(activity);
+  //   activityForm().addEventListener('submit', updateActivity)
+  // }
   
-  async function updateActivity(e) {
-    e.preventDefault();
+  // async function updateActivity(e) {
+  //   e.preventDefault();
   
   
-    const strongParams = {
-      activity: {
-        title: getTitle().value
+  //   const strongParams = {
+  //     activity: {
+  //       title: getTitle().value
         
-      }
-    }
+  //     }
+  //   }
   
-    const response = await fetch(ActivityService.baseUrl + `/activities/${this.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(strongParams)
-    })
+  //   const response = await fetch(ActivityService.baseUrl + `/activities/${this.id}`, {
+  //     method: 'PATCH',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(strongParams)
+  //   })
   
-    const newActivity = await response.json();
-    const index = Activity.all.indexOf(this)
-    Activity.all[index] = new Activity(newActivity)
+    // const newActivity = await response.json();
+    // const index = Activity.all.indexOf(this)
+    // debugger
+    // Activity.all[index] = new Activity(newActivity)
   
-    activityForm().removeEventListener('submit', updateActivity)
-    formHeader().innerText = "Create Activity";
-    getTitle().value = '';
-    activityFormSubmit().value = "create activity";
-    activityForm().addEventListener('submit', Activity.createActivity);
+    // activityForm().removeEventListener('submit', updateActivity)
+    // formHeader().innerText = "Create Activity";
+    // getTitle().value = '';
+    // activityFormSubmit().value = "create activity";
+    // activityForm().addEventListener('submit', Activity.createActivity);
   
-    Activity.renderAll();
-  }
+  //   Activity.renderAll();
+  // }
 

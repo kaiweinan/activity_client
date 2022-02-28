@@ -6,6 +6,7 @@ class Activity {
       this.id = data.id;
       this.title = data.title;
       this.childenrolls = data.childenrolls;
+   
      
       Activity.all.push(this);
       
@@ -16,9 +17,11 @@ class Activity {
       const h3 = document.createElement('h3');
       const p = document.createElement('p');
       const form = document.createElement('form');
+      form.id = 'form'
+      div.dataset.id = this.id
 
       const deleteButton = document.createElement('button');
-      const editButton = document.createElement('button');
+      // const editButton = document.createElement('button');
 
       
       const childInput = document.createElement('input');
@@ -26,29 +29,30 @@ class Activity {
       
       h3.innerText = this.title;
       h3.style.color = 'blue';
-
+      
       this.childenrolls.forEach(child => {
-        p.innerText += `${child.name} `;
+        p.innerText += `${child.name}, `;
+      
       });
       p.style.color = 'green';
   
       deleteButton.innerText = 'delete activity';
       deleteButton.addEventListener('click', e => deleteActivity(this))
   
-      editButton.innerText = 'edit activity';
-      editButton.addEventListener('click', e => editActivity(this))
+      // editButton.innerText = 'edit activity';
+      // editButton.addEventListener('click', e => editActivity(this))
 
       childInput.type = 'text';
 
       addButton.type = 'submit';
       addButton.value = 'add child';
-      p.addEventListener('submit', e => Activity.addChild(this, e))
+      div.addEventListener('submit', e => Activity.addChild(e))
   
       div.appendChild(h3);
       div.appendChild(p);
       div.appendChild(deleteButton);
-      div.appendChild(editButton);
-      p.appendChild(form)
+      // div.appendChild(editButton);
+      div.appendChild(form)
   
       form.appendChild(childInput);
       form.appendChild(addButton);
@@ -84,7 +88,7 @@ class Activity {
       
       const data = await ActivityService.post('/activities', strongParams);
       
-      const activityObj = new Activity(data)
+      const activityObj = new Activity(data.data.attributes)
   
       activityObj.render();
       document.getElementById('title').value = ""
@@ -92,19 +96,21 @@ class Activity {
 
 
     static addChild = async (e) => {
-      debugger
       e.preventDefault()
-    
-      const strongParams = {
-        activity: {
-          activity: getActivity().value,
+      
+    // debugger
+      const childParams = {
+        childenroll: {
+          name: childForm().children[0].value,
+          activity_id: e.target.parentElement.dataset.id
         }
     
       }
-    
-      const kidsData = await ActivityService.post('/childenrolls', strongParams)
-
+    // debugger
+      const kidsData = await ActivityService.post('/childenrolls', childParams)
+debugger
       const childenrollObj = new Activity(kidsData)
+      
       childenrollObj.render()
       // const newChildenroll = await childenrollObj.json();
       document.getElementById('name').value = ""

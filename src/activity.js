@@ -21,7 +21,6 @@ class Activity {
       div.dataset.id = this.id
 
       const deleteButton = document.createElement('button');
-      // const editButton = document.createElement('button');
 
       
       const childInput = document.createElement('input');
@@ -38,10 +37,6 @@ class Activity {
   
       deleteButton.innerText = 'delete activity';
       deleteButton.addEventListener('click', e => deleteActivity(this))
-  
-      // editButton.innerText = 'edit activity';
-      // editButton.addEventListener('click', e => editActivity(this))
-
       childInput.type = 'text';
 
       addButton.type = 'submit';
@@ -51,7 +46,6 @@ class Activity {
       div.appendChild(h3);
       div.appendChild(p);
       div.appendChild(deleteButton);
-      // div.appendChild(editButton);
       div.appendChild(form)
   
       form.appendChild(childInput);
@@ -59,7 +53,6 @@ class Activity {
 
       
       activityList().appendChild(div);
-      activityList().appendChild(p);
     }
   
     static renderAll() {
@@ -97,25 +90,25 @@ class Activity {
 
     static addChild = async (e) => {
       e.preventDefault()
-      
-    // debugger
+           
       const childParams = {
         childenroll: {
-          name: childForm().children[0].value,
+          name: e.target.children[0].value, 
           activity_id: e.target.parentElement.dataset.id
+          
         }
-    
-      }
-    // debugger
-      const kidsData = await ActivityService.post('/childenrolls', childParams)
-debugger
-      const childenrollObj = new Activity(kidsData)
+        
+      }     
       
-      childenrollObj.render()
-      // const newChildenroll = await childenrollObj.json();
-      document.getElementById('name').value = ""
-      // const index = Activity.all.indexOf(Childenroll)
-      // Activity.all[index] = new Activity(newChildenroll)
+      const activityData = await ActivityService.post('/childenrolls', childParams)
+
+      const activityObj = new Activity(activityData.data.attributes)       
+      e.target.parentElement.children[1].innerText +=  e.target.children[0].value   + ", "
+
+      e.target.children[0].value = ""
+
+
+  
     }
 
 
